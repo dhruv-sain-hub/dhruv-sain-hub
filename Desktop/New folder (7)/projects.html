@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Works | Kartik Sain</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cursor-blob"></div>
+
+    <nav class="navbar glass">
+        <a href="index.html" class="logo">KS.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="projects.html" class="active">Selected Works</a>
+            <a href="blog.html">Digital Logs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button id="theme-toggle" class="magnetic-btn" aria-label="Toggle Theme">
+            <i class="ri-moon-fill" id="theme-icon"></i>
+        </button>
+    </nav>
+
+    <main class="page-padding">
+        <section class="page-header fade-up">
+            <h1 class="title">Selected Works.</h1>
+            <p class="subtitle">A curation of development projects and design case studies.</p>
+        </section>
+
+        <!-- Development Projects -->
+        <section class="projects-category fade-up delay-1">
+            <div class="section-header">
+                <span class="section-tag">01.</span>
+                <h2 class="section-title">GitHub Engineering</h2>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Empty Placeholder -->
+                <div class="project-card glass empty-placeholder">
+                    <div class="icon-wrap"><i class="ri-github-fill"></i></div>
+                    <h3>Project Title</h3>
+                    <p>Repository syncing in progress...</p>
+                    <div class="tech-stack-tags">
+                        <span>React</span> <span>Python</span>
+                    </div>
+                </div>
+                <div class="project-card glass empty-placeholder">
+                    <div class="icon-wrap"><i class="ri-code-s-slash-line"></i></div>
+                    <h3>Project Title</h3>
+                    <p>Repository syncing in progress...</p>
+                    <div class="tech-stack-tags">
+                        <span>JS</span> <span>MySQL</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Design Case Studies -->
+        <section class="projects-category fade-up delay-2" style="margin-top: 5rem;">
+            <div class="section-header">
+                <span class="section-tag">02.</span>
+                <h2 class="section-title">Design Case Studies</h2>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Empty Placeholder -->
+                <div class="project-card glass empty-placeholder design-card">
+                    <div class="icon-wrap"><i class="ri-pencil-ruler-2-line"></i></div>
+                    <h3>UX Case Study</h3>
+                    <p>Case study documentation pending...</p>
+                    <div class="tech-stack-tags">
+                        <span>Figma</span> <span>UI/UX</span>
+                    </div>
+                </div>
+                <div class="project-card glass empty-placeholder design-card">
+                    <div class="icon-wrap"><i class="ri-layout-masonry-line"></i></div>
+                    <h3>App Redesign</h3>
+                    <p>Visual assets being prepared...</p>
+                    <div class="tech-stack-tags">
+                        <span>UI Design</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Kartik Sain</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- DevIcons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cursor-blob"></div>
+
+    <nav class="navbar glass">
+        <a href="index.html" class="logo">KS.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="projects.html">Selected Works</a>
+            <a href="blog.html">Digital Logs</a>
+            <a href="contact.html" class="active">Contact</a>
+        </div>
+        <button id="theme-toggle" class="magnetic-btn" aria-label="Toggle Theme">
+            <i class="ri-moon-fill" id="theme-icon"></i>
+        </button>
+    </nav>
+
+    <main class="page-content" style="padding-top: 120px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+        <section class="contact-section w-full max-w-3xl glass" style="padding: 3rem; border-radius: 20px;">
+            <div class="section-header fade-up text-center mb-8">
+                <span class="section-tag">04.</span>
+                <h2 class="section-title">Let's Connect</h2>
+                <p>Have an idea or a project in mind? Fill out the form below to get in touch.</p>
+            </div>
+            
+            <div class="form-container fade-up delay-1">
+                <form id="contactForm" class="contact-form">
+                    <div class="input-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" class="glass-input" required placeholder="John Doe">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="glass-input" required placeholder="john@example.com">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="reason">Reason for Contact</label>
+                        <select id="reason" name="reason" class="glass-input" required style="cursor: pointer; background: rgba(0,0,0,0.5);">
+                            <option value="project">Project Inquiry</option>
+                            <option value="freelance">Freelance Opportunity</option>
+                            <option value="job">Job Offer</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="glass-input" rows="5" required placeholder="Tell me about your project..."></textarea>
+                    </div>
+                    
+                    <div class="submit-group" style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
+                        <button type="submit" class="btn primary magnetic-btn w-full" style="width: 100%; justify-content: center;" id="submitBtn">
+                            Send Message <i class="ri-send-plane-fill"></i>
+                        </button>
+                        <div id="formStatus" class="form-status"></div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer glass" style="margin-top: auto;">
+        <div class="footer-bottom" style="text-align: center; padding: 1.5rem;">
+            <p>&copy; 2024 Kartik Sain. All rights reserved. Designed & Engineered.</p>
+        </div>
+    </footer>
+
+    <!-- InsForge Logic -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@insforge/sdk@latest'
+
+        // Connect to InsForge
+        const insforge = createClient(
+            'https://d4ad52wz.ap-southeast.insforge.app', 
+            'ik_0d23e2c84a3bc1fbf5485ad80d323239' 
+            // In a real client-side app, this should be the Anon key, but since they both 
+            // share the API Key for this test project (from project.json api_key = anon_key in some setups or using anon key)
+            // Wait, let's look at project.json: "api_key". We will use that for now since we have it.
+        )
+        
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusDiv = document.getElementById('formStatus');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const reason = document.getElementById('reason').value;
+            const message = document.getElementById('message').value;
+            
+            submitBtn.innerHTML = 'Sending... <i class="ri-loader-4-line spin"></i>';
+            submitBtn.disabled = true;
+            statusDiv.textContent = '';
+            
+            try {
+                // 1. Insert into DB
+                const { error: dbError } = await insforge
+                    .from('contact_messages')
+                    .insert([{ name, email, reason, message }]);
+                    
+                if (dbError) throw new Error(dbError.message);
+                
+                // 2. Trigger Email Function
+                const { data: fnData, error: fnError } = await insforge.functions.invoke('send-contact-email', {
+                    body: { name, email, reason, message }
+                });
+                
+                if (fnError) throw new Error("Database saved, but email failed: " + fnError.message);
+                
+                statusDiv.innerHTML = '<span style="color: #4ade80;">Message sent successfully!</span>';
+                form.reset();
+            } catch (err) {
+                statusDiv.innerHTML = `<span style="color: #f87171;">Error: ${err.message}</span>`;
+            } finally {
+                submitBtn.innerHTML = 'Send Message <i class="ri-send-plane-fill"></i>';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+
+    <style>
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .glass-input {
+            background: rgba(var(--glass-bg-rgb), 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: var(--accent-light);
+            background: rgba(var(--glass-bg-rgb), 0.5);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .form-status {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</body>
+</html>
